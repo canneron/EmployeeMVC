@@ -1,0 +1,70 @@
+springdoc:
+  swagger-ui:
+    path: /index.html # Custom path for Swagger UI
+    groupName: v1 # Group name for API documentation
+    title: Employee API Documentation # Title of the API documentation
+    description: Documentation for Employee API operations # Description of the API
+    deepLinking: true # Enable deep linking for the Swagger UI
+    defaultModelsExpandDepth: 1 # Expand models by default to show model properties
+    defaultModelExpandDepth: 1 # Expand model properties by default
+    displayRequestDuration: true # Display request duration
+    docExpansion: list # Set the default expansion mode for the operation list
+    showExtensions: true # Show extensions
+    tagsSorter: alpha # Sort tags alphabetically
+    operationsSorter: alpha # Sort operations alphabetically within tags
+    supportedSubmitMethods:
+      - get
+      - post
+      - put
+      - delete
+      - patch
+    validatorUrl: "" # URL for Swagger validator
+    urls:
+      - name: Employee API
+        url: /v3/api-docs # URL for the OpenAPI documentation
+  api-docs:
+    path: /v3/api-docs # OpenAPI documentation path
+    operation:
+      updateEmployee:
+        tags:
+          - Employee Operations
+        summary: Update Employee
+        description: Updates an existing employee record in the database.
+        parameters:
+          - name: id
+            in: path
+            description: ID of the employee to be updated
+            required: true
+            schema:
+              type: integer
+              format: int64
+          - name: employee
+            in: body
+            description: Employee object with updated information
+            required: true
+            schema:
+              $ref: '#/components/schemas/Employee'
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Employee'
+          '404':
+            description: Employee not found
+          '500':
+            description: Internal server error
+  components:
+    schemas:
+      Employee:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          name:
+            type: string
+          department:
+            type: string
+          # Add other properties as needed
