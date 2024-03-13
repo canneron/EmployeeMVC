@@ -1,15 +1,17 @@
 package com.example.demo.controllers;
 
 import com.example.demo.model.Employee;
+import com.example.demo.model.Office;
 import com.example.demo.repositories.EmployeeRepository;
+import com.example.demo.repositories.OfficeRepository;
 import com.example.demo.services.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+//import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +29,7 @@ public class EmployeeController {
 
     @GetMapping
     public ResponseEntity<?> list() {
-        List<Employee> returnedList = employeeRepository.findAll();
+        List<String> returnedList = employeeRepository.findAllAccess();
         if (returnedList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No employees found");
         }
@@ -48,13 +50,9 @@ public class EmployeeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> create(@RequestBody @Valid final Employee emp) {
-//        if (result.hasErrors()) {
-//            // Handle validation errors
-//            return ResponseEntity.badRequest().body("Invalid employee data");
-//        }
-
-        Employee savedEmployee = employeeRepository.saveAndFlush(emp);
+        Employee savedEmployee = employeeRepository.save(emp);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedEmployee);
     }
 
@@ -69,6 +67,8 @@ public class EmployeeController {
     }
 
     @RequestMapping(value = "/starts/{c}")
+    @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> startsWith(@PathVariable char c) {
         List<Employee> returnedList = employeeService.findEmployeeBeginningWithChar(c);
         if (returnedList.isEmpty()) {
@@ -83,7 +83,7 @@ public class EmployeeController {
         try {
             Employee existingEmp = employeeRepository.findById(id).orElseThrow();
             BeanUtils.copyProperties(emp, existingEmp, "employee_id");
-            Employee newEmp = employeeRepository.saveAndFlush(existingEmp);
+            Employee newEmp = employeeRepository.save(existingEmp);
             return ResponseEntity.status(HttpStatus.OK).body(newEmp);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No employees found");

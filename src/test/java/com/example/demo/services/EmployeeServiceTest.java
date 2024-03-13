@@ -2,7 +2,6 @@ package com.example.demo.services;
 
 import com.example.demo.model.Employee;
 import com.example.demo.repositories.EmployeeRepository;
-import jakarta.validation.constraints.AssertTrue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,7 +28,7 @@ public class EmployeeServiceTest {
     EmployeeRepository employeeRepository;
 
     @Test
-    public void testFindEmployeeBeginningWithChar_whenFound() {
+     void testFindEmployeeBeginningWithChar_whenFound() {
         List<Employee> testList = new ArrayList<>();
         testList.add(createEmployee());
         Mockito.when(employeeRepository.findAll()).thenReturn(testList);
@@ -37,7 +36,7 @@ public class EmployeeServiceTest {
         List<Employee> returned = employeeService.findEmployeeBeginningWithChar('L');
 
         assertNotNull(returned);
-        assertEquals(11, returned.get(0).getEmployee_id());
+        assertEquals(11, returned.get(0).getEmployeeId());
     }
 
     @Test
@@ -51,9 +50,9 @@ public class EmployeeServiceTest {
 
     private Employee createEmployee() {
         Employee emp = new Employee();
-        emp.setEmployee_id(11);
-        emp.setFirst_name("Leo");
-        emp.setLast_name("Tolstoy");
+        emp.setEmployeeId(11);
+        emp.setFirstName("Leo");
+        emp.setLastName("Tolstoy");
         emp.setTitle("Mr");
         emp.setAccess("Level 2");
         return emp;

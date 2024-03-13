@@ -18,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
@@ -122,7 +121,7 @@ public class EmployeeControllerTest {
     public void testCreate_whenValidBody() throws Exception {
         Employee employee = createEmployee();
 
-        when(employeeRepository.saveAndFlush(Mockito.any())).thenReturn(employee);
+        when(employeeRepository.save(Mockito.any())).thenReturn(employee);
 
         // Perform GET request and verify response
         mockMvc.perform(MockMvcRequestBuilders.post("/api/employee")
@@ -198,7 +197,7 @@ public class EmployeeControllerTest {
         Employee updatedEmployee = createEmployee2();
 
         when(employeeRepository.findById(11)).thenReturn(java.util.Optional.of(existingEmployee));
-        when(employeeRepository.saveAndFlush(any(Employee.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(employeeRepository.save(any(Employee.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/employee/update/11")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -238,9 +237,9 @@ public class EmployeeControllerTest {
 
     private Employee createEmployee() {
         Employee emp = new Employee();
-        emp.setEmployee_id(11);
-        emp.setFirst_name("Leo");
-        emp.setLast_name("Tolstoy");
+        emp.setEmployeeId(11);
+        emp.setFirstName("Leo");
+        emp.setLastName("Tolstoy");
         emp.setTitle("Mr");
         emp.setAccess("Level 2");
         return emp;
@@ -248,9 +247,9 @@ public class EmployeeControllerTest {
 
     private Employee createEmployee2() {
         Employee emp = new Employee();
-        emp.setEmployee_id(1916);
-        emp.setFirst_name("Michael");
-        emp.setLast_name("Collins");
+        emp.setEmployeeId(1916);
+        emp.setFirstName("Michael");
+        emp.setLastName("Collins");
         emp.setTitle("Mr");
         emp.setAccess("Level 5");
         return emp;
