@@ -1,16 +1,13 @@
 package com.example.demo.controllers;
 
 import com.example.demo.model.Employee;
-import com.example.demo.model.Office;
 import com.example.demo.repositories.EmployeeRepository;
-import com.example.demo.repositories.OfficeRepository;
 import com.example.demo.services.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +47,7 @@ public class EmployeeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('Level 0', 'Level 1')")
     public ResponseEntity<?> create(@RequestBody @Valid final Employee emp) {
         Employee savedEmployee = employeeRepository.save(emp);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedEmployee);
@@ -68,7 +65,7 @@ public class EmployeeController {
 
     @RequestMapping(value = "/starts/{c}")
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('Level 3')")
     public ResponseEntity<?> startsWith(@PathVariable char c) {
         List<Employee> returnedList = employeeService.findEmployeeBeginningWithChar(c);
         if (returnedList.isEmpty()) {
